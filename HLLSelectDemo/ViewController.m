@@ -13,6 +13,8 @@
 @property (nonnull ,strong) NSMutableArray * datas;
 @property (nonatomic ,strong) NSIndexPath  * selectedIndexPath;
 
+@property (strong, nonatomic) IBOutlet UIBarButtonItem *showSelectedResult;
+
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (strong, nonatomic) IBOutlet UISegmentedControl *chooseTypeSegmentControl;
 @property (strong, nonatomic) IBOutlet UIBarButtonItem *editButton;
@@ -26,15 +28,19 @@ static NSString * const kCellIdentifier = @"cell";
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    // UI
 //    self.navigationItem.rightBarButtonItem = self.editButton;
     self.tableView.tableHeaderView = self.chooseTypeSegmentControl;
+    self.navigationItem.leftBarButtonItem = self.showSelectedResult;
     
+    // Data
     _datas = [NSMutableArray array];
     
     for (NSInteger index = 0; index < 30; index ++) {
         NSString * string = [NSString stringWithFormat:@"This is NO.%ld",(long)index];
         [_datas addObject:string];
     }
+    
 #pragma mark - 决定单选或者多选
 //    _tableView.allowsSelection = YES;
 //    _tableView.allowsMultipleSelection = YES;
@@ -79,6 +85,7 @@ static NSString * const kCellIdentifier = @"cell";
 #pragma mark - 单选可以回退
         if (_selectedIndexPath == indexPath) {
             cell.accessoryType = UITableViewCellAccessoryNone;
+            [tableView deselectRowAtIndexPath:_selectedIndexPath animated:YES];
             _selectedIndexPath = nil;
         }else{
             cell.accessoryType = UITableViewCellAccessoryCheckmark;
@@ -93,6 +100,8 @@ static NSString * const kCellIdentifier = @"cell";
             cell.accessoryType = UITableViewCellAccessoryNone;
         }
     }
+    
+    NSLog(@"select----->%@",tableView.indexPathForSelectedRow);
 }
 
 - (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -139,6 +148,26 @@ static NSString * const kCellIdentifier = @"cell";
         self.editButton.title = @"Done";
         [self.tableView setEditing:YES animated:YES];
     }
+}
+- (IBAction)showSelectedResult:(UIBarButtonItem *)sender {
+    
+    NSMutableString * result = [NSMutableString string];
+    
+    if (self.tableView.indexPathForSelectedRow && (self.chooseTypeSegmentControl.selectedSegmentIndex == 0 || self.chooseTypeSegmentControl.selectedSegmentIndex == 1)) {
+        [result appendString:[NSString stringWithFormat:@"Row:%ld",self.tableView.indexPathForSelectedRow.row]];
+    }else if (self.chooseTypeSegmentControl.selectedSegmentIndex == 2
+        && self.tableView.indexPathsForSelectedRows) {
+        
+        for (NSIndexPath * indexPath in self.tableView.indexPathsForSelectedRows) {
+            [result appendString:[NSString stringWithFormat:@"Row:%ld \n",indexPath.row]];
+        }
+    }else{
+        [result appendString: @"N/A"];
+    }
+    UIAlertController * alertC = [UIAlertController alertControllerWithTitle:@"Selected" message:result preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction * sureAction = [UIAlertAction actionWithTitle:@"Sure" style:UIAlertActionStyleDestructive handler:nil];
+    [alertC addAction:sureAction];
+    [self presentViewController:alertC animated:YES completion:nil];
 }
 
 @end

@@ -48,10 +48,16 @@
                     <connections>
                         <outlet property="chooseTypeSegmentControl" destination="YM1-MA-5FL" id="e2w-Ft-Qxx"/>
                         <outlet property="editButton" destination="X8S-Wk-aMW" id="19r-VN-cLI"/>
+                        <outlet property="showSelectedResult" destination="An6-CN-v5y" id="T7t-vn-0Cu"/>
                         <outlet property="tableView" destination="sms-rS-iDw" id="Clh-q3-Qyk"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+                <barButtonItem title="Show" id="An6-CN-v5y">
+                    <connections>
+                        <action selector="showSelectedResult:" destination="BYZ-38-t0r" id="YqB-CG-QsD"/>
+                    </connections>
+                </barButtonItem>
                 <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" id="YM1-MA-5FL">
                     <rect key="frame" x="0.0" y="0.0" width="121" height="30"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
